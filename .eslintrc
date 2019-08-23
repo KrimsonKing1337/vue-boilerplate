@@ -1,0 +1,70 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint",
+    "ecmaVersion": 8,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "templateStrings": true,
+      "superInFunctions": false,
+      "classes": true,
+      "modules": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [
+    "babel"
+    // "prettier"
+  ],
+  "extends": [
+    "plugin:vue/recommended"
+    // "stylelint"
+  ],
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack/webpack.config.js"
+      }
+    }
+  },
+  "rules": {
+    // "prettier/prettier": "error",
+    "global-require": "off",
+    "array-callback-return": "off",
+    "no-console": "off",
+    "import/no-extraneous-dependencies": 0,
+    "prefer-const": ["error", {
+      "destructuring": "any",
+      "ignoreReadBeforeAssign": false
+    }],
+    "prefer-template": "error",
+    "object-shorthand": ["error", "always"],
+    "arrow-parens": ["error", "always"],
+    "prefer-arrow-callback": "error",
+    "space-in-parens": ["error", "never"],
+    "no-trailing-spaces": "error",
+    "no-multi-spaces": "error",
+    "no-underscore-dangle": "error",
+    "vue/max-attributes-per-line": ["error", {
+      "singleline": 3,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": false
+      }
+    }]
+  },
+  "globals": {
+    "Vue": true,
+    "document": true,
+    "window": true,
+    "jQuery": true,
+    "$": true,
+    "localStorage": true,
+    "fetch": true,
+    "ENV": true
+  }
+}

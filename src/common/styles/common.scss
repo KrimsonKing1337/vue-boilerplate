@@ -1,0 +1,10 @@
+@import "./mixins";
+
+a {
+  text-decoration: underline;
+  @include hover-default;
+}
+
+.debug {
+  color: red;
+}

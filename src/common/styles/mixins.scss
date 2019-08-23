@@ -1,0 +1,18 @@
+@mixin hover-default()  {
+  transition: ease opacity 0.3s 0s;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+@mixin wrapper {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}

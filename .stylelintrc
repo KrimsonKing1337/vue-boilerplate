@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    "stylelint-scss"
+  ],
+  "extends": "stylelint-config-recommended-scss",
+  "rules": {
+    "comment-no-empty": true,
+    "selector-pseudo-class-no-unknown": true,
+    "selector-pseudo-element-no-unknown": true,
+    "selector-type-no-unknown": true,
+    "font-family-name-quotes": "always-where-recommended",
+    "string-quotes": "double"
+  }
+}
