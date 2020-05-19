@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const argv = require('yargs').argv;
+const OptimizeCssNanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 const rootPath = resolve(__dirname, '../');
 
 const env = process.env.NODE_ENV || 'development';
@@ -14,6 +14,20 @@ const extractStyles = new ExtractTextPlugin({
   filename: '[name].[hash].css',
   disable: process.env.NODE_ENV === 'development'
 });
+
+// если нужно минифицировать css - подкидываем плагин, иначе - пустую функцию (как того требует стандарт вебпака)
+const optimizeCssNano = env === 'production'
+  ? new OptimizeCssNanoPlugin({
+    sourceMap: true,
+    cssnanoOptions: {
+      preset: ['default', {
+        discardComments: {
+          removeAll: true,
+        },
+      }],
+    },
+  })
+  : () => {};
 
 module.exports = {
   mode: env,
@@ -34,9 +48,19 @@ module.exports = {
       exclude: ['.gitkeep'],
     }),
     extractStyles,
+    optimizeCssNano,
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: `${rootPath}/src/htmlRoot.html`
+      template: `${rootPath}/src/htmlRoot.ejs`,
+      filename: 'index.html',
+      inject: 'body',
+      title: 'vue-boilerplate',
+      svgoConfig: {
+        cleanupIDs: true,
+        removeTitle: false,
+        removeAttrs: false,
+        removeViewBox: true
+      }
     }),
     new CopyWebpackPlugin([{
       from: `${rootPath}/public/`,
@@ -51,7 +75,8 @@ module.exports = {
     extensions: ['.js', '.css', '.json', '.md'],
     modules: ['src', 'public', 'node_modules'],
     alias: {
-      vue: env === 'production' ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js'
+      vue: env === 'production' ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js',
+      '@': resolve('src')
     }
   },
   module: {
@@ -95,7 +120,21 @@ module.exports = {
       })
     }, {
       test: /\.css$/,
-      use: 'css-loader?sourceMap=true',
+      oneOf: [
+        {
+          resourceQuery: '/module/',
+          use: {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIndentName: '[local]_[hash:base64:5]'
+            }
+          }
+        },
+        {
+          use: 'css-loader?sourceMap=true'
+        }
+      ]
     }, {
       test: /\.(png|jpe?g|gif|svg|woff|woff2|eot|ttf)$/,
       use: 'file-loader?name=[name].[ext]&outputPath=./assets/'
@@ -114,6 +153,7 @@ module.exports = {
         {from: /./, to: '/'}
       ]
     },
-    hot: true
+    hot: true,
+    open: true,
   }
 };
