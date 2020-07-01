@@ -37,7 +37,7 @@ module.exports = {
   },
   devtool: 'source-map',
   entry: {
-    bundle: `${rootPath}/src/index.js`
+    bundle: `${rootPath}/src/index.ts`
   },
   output: {
     path: `${rootPath}/build/`,
@@ -73,7 +73,7 @@ module.exports = {
   ],
   context: rootPath,
   resolve: {
-    extensions: ['.js', '.css', '.json', '.md'],
+    extensions: ['.js', '.ts', '.vue', '.css', '.json', '.md'],
     modules: ['../', 'src', 'public', 'node_modules'],
     alias: {
       vue: env === 'production' ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js',
@@ -82,6 +82,14 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.ts?$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/]
+        }
+      },
       {
         test: /\.js?$/,
         use: 'babel-loader',
@@ -93,8 +101,8 @@ module.exports = {
           {
             loader: 'vue-loader',
             options: {
-              hotReload: true,
-              esModule: true
+              esModule: true,
+              hotReload: true
             }
           },
           {

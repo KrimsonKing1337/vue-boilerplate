@@ -1,14 +1,17 @@
 <script>
-    export default {
-        name: 'Err404'
+  import Title from './components/Title/Title.vue';
+
+  export default {
+    name: 'Err404',
+    components: {
+      Title
     }
+  };
 </script>
 
 <template>
   <div class="error-404">
-    <div class="warning">
-      Error 404: Page not found
-    </div>
+    <Title title="sdf" />
 
     <router-link to="/" class="go-back">
       Go back
@@ -21,12 +24,6 @@
 
   .error-404 {
     @include wrapper;
-  }
-
-  .warning {
-    font-size: 24px;
-    font-weight: bold;
-    color: red;
   }
 
   .go-back {
