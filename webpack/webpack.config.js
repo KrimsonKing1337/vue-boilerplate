@@ -22,12 +22,13 @@ const optimizeCssNano = env === 'production'
     cssnanoOptions: {
       preset: ['default', {
         discardComments: {
-          removeAll: true,
-        },
-      }],
-    },
+          removeAll: true
+        }
+      }]
+    }
   })
-  : () => {};
+  : () => {
+  };
 
 module.exports = {
   mode: env,
@@ -45,7 +46,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(`${rootPath}/build/*`, {
       root: `${rootPath}/build/`,
-      exclude: ['.gitkeep'],
+      exclude: ['.gitkeep']
     }),
     extractStyles,
     optimizeCssNano,
@@ -67,81 +68,135 @@ module.exports = {
       to: `${rootPath}/build/`
     }]),
     new webpack.DefinePlugin({
-      "ENV": JSON.stringify(env)
-    }),
+      'ENV': JSON.stringify(env)
+    })
   ],
   context: rootPath,
   resolve: {
     extensions: ['.js', '.css', '.json', '.md'],
-    modules: ['src', 'public', 'node_modules'],
+    modules: ['../', 'src', 'public', 'node_modules'],
     alias: {
       vue: env === 'production' ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js',
       '@': resolve('src')
     }
   },
   module: {
-    rules: [{
-      test: /\.js?$/,
-      use: 'babel-loader',
-      exclude: /node_modules/
-    }, {
-      test: /\.vue$/,
-      loader: 'vue-loader',
-      options: {
-        hotReload: true,
-        esModule: true
-      }
-    }, {
-      test: /\.scss$/,
-      exclude: /node_modules/,
-      use: extractStyles.extract({
-        use: [{
-          loader: 'css-loader',
-          options: {
-            sourceMap: true,
-            importLoaders: 0,
-            modules: false
-          }
-        }, {
-          loader: 'postcss-loader',
-          options: {
-            sourceMap: true,
-            plugins: [require('autoprefixer')()]
-          }
-        }, {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true,
-            includePaths: [`${rootPath}/src`],
-            outputStyle: 'collapsed'
-          },
-        }],
-        fallback: 'style-loader'
-      })
-    }, {
-      test: /\.css$/,
-      oneOf: [
-        {
-          resourceQuery: '/module/',
-          use: {
-            loader: 'css-loader',
+    rules: [
+      {
+        test: /\.js?$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.vue$/,
+        use: [
+          {
+            loader: 'vue-loader',
             options: {
-              modules: true,
-              localIndentName: '[local]_[hash:base64:5]'
+              hotReload: true,
+              esModule: true
+            }
+          },
+          {
+            loader: 'vue-svg-inline-loader',
+            options: {
+              svgo: {
+                plugins: [
+                  {
+                    removeViewBox: true
+                  },
+                  {
+                    cleanupIDs: true
+                  },
+                  {
+                    prefixIds: true
+                  },
+                  {
+                    removeAttrs: {
+                      attrs: '*:(stroke|fill):((?!^none$).)*'
+                    }
+                  }
+                ]
+              }
             }
           }
-        },
-        {
-          use: 'css-loader?sourceMap=true'
+        ]
+      },
+      {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: extractStyles.extract({
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                url: false,
+                sourceMap: true,
+                importLoaders: 0,
+                modules: false
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                sourceMap: true,
+                plugins: [require('autoprefixer')()]
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+                includePaths: [
+                  '../',
+                  '../src',
+                ],
+                outputStyle: 'collapsed'
+              }
+            },
+          ],
+          fallback: 'style-loader'
+        })
+      },
+      {
+        test: /\.css$/,
+        oneOf: [
+          {
+            resourceQuery: '/module/',
+            use: {
+              loader: 'css-loader',
+              options: {
+                url: false,
+                modules: true,
+                localIndentName: '[local]_[hash:base64:5]'
+              }
+            }
+          },
+          {
+            use: {
+              loader: 'css-loader',
+              options: {
+                url: false,
+                sourceMap: true,
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg|woff|woff2|eot|ttf)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]'
+          }
         }
-      ]
-    }, {
-      test: /\.(png|jpe?g|gif|svg|woff|woff2|eot|ttf)$/,
-      use: 'file-loader?name=[name].[ext]&outputPath=./assets/'
-    }, {
-      test: /\.html$/,
-      use: 'raw-loader'
-    }]
+      },
+      {
+        test: /\.html$/,
+        use: 'raw-loader'
+      }
+    ]
   },
   devServer: {
     host: 'localhost',
@@ -150,10 +205,11 @@ module.exports = {
     publicPath: '/',
     historyApiFallback: {
       rewrites: [
-        {from: /./, to: '/'}
+        { from: /./, to: '/' }
       ]
     },
+    overlay: true,
     hot: true,
-    open: true,
+    open: true
   }
 };

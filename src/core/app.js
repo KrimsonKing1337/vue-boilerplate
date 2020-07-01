@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import router from './app.routes.js';
+import router from './router.js';
 import Fragment from 'vue-fragment';
+import './styles/styles.scss';
 
 Vue.use(Fragment.Plugin);
 

@@ -28,7 +28,7 @@
 </template>
 
 <style scoped lang="scss">
-  @import "~common/styles/mixins";
+  @import "~@/core/styles/mixins";
 
   .about {
     @include wrapper;

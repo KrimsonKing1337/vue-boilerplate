@@ -6,9 +6,8 @@
   },
   "parserOptions": {
     "parser": "babel-eslint",
-    "ecmaVersion": 8,
+    "ecmaVersion": 2020,
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
       "templateStrings": true,
       "superInFunctions": false,
       "classes": true,
@@ -33,6 +32,7 @@
   },
   "rules": {
     // "prettier/prettier": "error",
+    "quotes": [2, "single", { "avoidEscape": true }],
     "global-require": "off",
     "array-callback-return": "off",
     "no-console": "off",
@@ -54,6 +54,11 @@
       "multiline": {
         "max": 1,
         "allowFirstLine": false
+      }
+    }],
+    "vue/html-self-closing": ["error", {
+      "html": {
+        "void": "always"
       }
     }]
   },

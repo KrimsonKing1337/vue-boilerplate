@@ -17,7 +17,7 @@
 </template>
 
 <style scoped lang="scss">
-  @import "~common/styles/mixins";
+  @import "~@/core/styles/mixins";
 
   .error-404 {
     @include wrapper;
