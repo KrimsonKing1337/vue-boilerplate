@@ -1,6 +1,6 @@
 <template>
   <div class="title" @click="handleClick">
-    {{ title }}
+    {{ text.title }}
   </div>
 </template>
 
@@ -9,13 +9,13 @@
 
   interface ComplexMessage {
     title: string,
+    count: number,
   }
 
   export default Vue.extend({
-    name: 'Title',
     props: {
-      title: {
-        type: String,
+      text: {
+        type: Object as PropType<ComplexMessage>,
         required: true
       }
     },

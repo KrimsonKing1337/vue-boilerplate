@@ -11,7 +11,8 @@
 
 <template>
   <div class="error-404">
-    <Title title="sdf" />
+    {{ /* there must be an error */ }}
+    <Title :text="{title: 123}" />
 
     <router-link to="/" class="go-back">
       Go back

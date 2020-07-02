@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssNanoPlugin = require('@intervolga/optimize-cssnano-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const rootPath = resolve(__dirname, '../');
 
 const env = process.env.NODE_ENV || 'development';
@@ -44,6 +45,7 @@ module.exports = {
     filename: '[name].[hash].js'
   },
   plugins: [
+    new VueLoaderPlugin(),
     new CleanWebpackPlugin(`${rootPath}/build/*`, {
       root: `${rootPath}/build/`,
       exclude: ['.gitkeep']
@@ -83,12 +85,18 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts?$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
-        loader: 'ts-loader',
-        options: {
-          appendTsSuffixTo: [/\.vue$/]
-        }
+        use: [
+          'babel-loader',
+          {
+            loader: 'ts-loader',
+            options: {
+              appendTsSuffixTo: [/\.vue$/],
+              appendTsxSuffixTo: [/\.vue$/],
+            },
+          },
+        ],
       },
       {
         test: /\.js?$/,

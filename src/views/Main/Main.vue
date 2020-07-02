@@ -2,6 +2,7 @@
   import Header from 'components/Header';
   import Footer from 'components/Footer';
   import img from 'public/example.jpg';
+  import LocalStorage from '@/utils/LocalStorage.ts';
 
   export default {
     name: 'Main',
@@ -13,12 +14,19 @@
       return {
         img
       }
+    },
+    methods: {
+      handleClick() {
+        console.log(123);
+
+        LocalStorage.write(null, '123'); // there must be an error
+      }
     }
   };
 </script>
 
 <template>
-  <div class="main" :style="{'background-image': `url('${img}')`}">
+  <div class="main" :style="{'background-image': `url('${img}')`}" @click="handleClick">
     <div class="content">
       <Header />
 
